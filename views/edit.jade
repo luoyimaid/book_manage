@@ -1,1 +1,21 @@
 include layout
+
+form(role= "form", method='post', class= 'form-horizontal', action='/'+book.id)
+    input(name='_method', value='PUT', type='hidden')
+    fieldset
+        legend 编辑本书
+        div.form-group
+            label(for="title", class="col-sm-2 control-label") 书名
+            div.col-sm-10
+                input(type="text", class="form-control", name="title", placeholder="请输入书名", value="#{book.title}")
+        div.form-group
+            label(for="descript", class="col-sm-2 control-label") 简介
+            div.col-sm-10
+                textarea(class="form-control", rows="3", name="descript", placeholder="简单描述该书") #{book.descript}
+        div.form-group
+            label(for="price", class="col-sm-2 control-label") 价格
+            div.col-sm-10
+                input(type="number", class="form-control", name="price", placeholder="请输入价格", value="#{book.price}")
+        div.form-group
+            div.col-sm-offset-2.col-sm-10.actions
+                input(type="submit", value='保存', class='btn btn-default')

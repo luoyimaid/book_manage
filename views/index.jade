@@ -2,14 +2,26 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
 
-  table.table.table-striped
+  table.table.table-bordered.text-center
     caption 图书管理
-      tbody
-        tr.active
-          td luoyi
-          td luoyi
-        tr.success
-          td luoyi
-          td luoyi
+    thead
+      tr.active
+        td 书名
+        td 描述
+        td 价格
+        td 操作
+    tbody
+      each book in docs
+        tr
+          td #{book.title}
+          td #{book.descript}
+          td #{book.price}
+          td 
+            a.btn(href='/#{book.id}/edit') 编辑
+            form(method='post', action='/' + book.id)
+              input(name='_method', value='DELETE', type='hidden')
+              button.btn(type='submit') 删除
+  
+  p 
+    a(href='/add', class='btn primary') 新增
