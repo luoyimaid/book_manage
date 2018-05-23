@@ -15,18 +15,19 @@ var schema = mongoose.Schema;
 var ObjectID = schema.ObjectID;
 // 定义模型的模式
 var Book = new schema({
-  // book: String
-  title: {
-    unique: true,
-    type: 'String',
-  },
-  descript: 'String',
-  price: 'Number',
-  meta: {
-      createAt: {
-          type: Date,
-          default: Date.now()
-      }
+  book: {
+    title: {
+      unique: true,
+      type: 'String',
+    },
+    descript: 'String',
+    price: 'Number',
+    meta: {
+        createAt: {
+            type: Date,
+            default: Date.now()
+        }
+    }
   }
 });
 // 使用变量来创建新任务
@@ -46,7 +47,7 @@ router.get('/add', function(req, res) {
 });
 
 router.post('/', function(req,res) {
-  var book = new Book(req.body);
+  var book = new Book(req.body.book);
   book.save(function(err) {
     if(!err) {
       res.redirect('/');
@@ -61,35 +62,36 @@ router.get('/:id/edit', function(req,res) {
   // var book = new Book(req.body);
   Book.findById(req.params.id, function(err,doc) {
     res.render('edit.jade', {
-      // title: 'edit Task View',
+      title: 'edit Task View',
       book: doc,
-      id: req.params.id
+      // id: req.params.id
     });
   });
 });
 
-router.put('/:id/edit', function(req,res) {
-  var book = new Book(req.body);
+router.put('/:id', function(req,res) {
+  // var book = req.body;
   Book.findByIdAndUpdate(req.params.id, function(err,doc) {
-    doc.books = req.body.book;
+    doc.book = req.body.book.book;
     doc.save(function(err) {
       if(!err) {
         res.redirect('/');
       }
       else {
         // error handing
+        console.log('定向错误');
       }
     });
   });
 });
 
-// router.delete('/:id', function(req,res) {
-//   Book.findById(req.params.id, function(err,doc) {
-//     if(!doc) return next(new NotFound('document not found!'));
-//     doc.remove(function() {
-//       res.redirect('/');
-//     });
-//   });
-// });
+router.delete('/:id', function(req,res) {
+  Book.findByIdAndRemove(req.params.id, function(err,doc) {
+    if(!doc) return next(new NotFound('document not found!'));
+    doc.remove(function() {
+      res.redirect('/');
+    });
+  });
+});
 
 module.exports = router;
